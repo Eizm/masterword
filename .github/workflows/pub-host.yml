@@ -23,15 +23,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2 
 
-      - uses: actions/setup-node@v3
-
       - run: cargo build
 
       - uses: actions/configure-pages@v2
 
       - uses: actions/upload-pages-artifact@v1
-        with:
-          path: 'build'
 
       - uses: actions/deploy-pages@v1
         id: deployment
