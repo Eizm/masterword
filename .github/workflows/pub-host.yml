@@ -33,7 +33,9 @@ jobs:
         with:
           # Optional version of wasm-pack to install(eg. 'v0.9.1', 'latest')
           version: 'latest'
-
+          
+      - uses: Swatinem/rust-cache@v2
+      
       - run: trunk build --public-url=https://eizm.github.io/masterword
 
       - uses: actions/configure-pages@v2
