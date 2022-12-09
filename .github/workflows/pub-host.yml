@@ -23,6 +23,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2 
 
+      - uses: jetli/trunk-action@v0.2.0
+        with:
+          # Optional version of trunk to install(eg. 'v0.8.1', 'latest')
+          version: 'latest'
+
       - run: trunk build
 
       - uses: actions/configure-pages@v2
