@@ -235,7 +235,7 @@ impl Component for Home {
             results[i][0] = self.results_master[i][0];
 			results[i][1] = self.results_master[i][1];
         }
-        let get_hints = |a: usize, l: usize| -> String {if results[a][l] == 0 {String::from("")} else {format!("{}", results[a][l])}};
+        let get_hints = |a: usize, l: usize| -> String {if self.attempts.len() > a {String::from("")} else {format!("{}", results[a][l])}};
         for i in 0..self.attempt.len() {
             letters[self.attempts.len()][i] = self.attempt[i].clone();
         }
@@ -374,6 +374,12 @@ impl Component for Home {
 
                 <button class="btn2" onclick={self.link.callback(|_| Msg::Enter)} style="border-radius:4px;top: 680px; left:18px;width=60px">{"Enter"}</button>
                 <button class="btn2" onclick={self.link.callback(|_| Msg::Backspace)} style="border-radius:4px;top: 680px; left:270px;width=60px">{"<-"}</button>
+            </div>
+            <div>
+                "Masterword-clues: The two boxes next to each attempt tell you how many letters occur in exactly the guessed location (top) and how many letters occur in a different location (bottom)."
+            </div>
+            <div>
+                "To help the player keep track, each letter can be coloured in green, orange, grey, or white (default). These colours are cycled when clicking on any occurrence of the letter in a guess. Be aware that any letter can globally only have one single colour."
             </div>
         }
     }
