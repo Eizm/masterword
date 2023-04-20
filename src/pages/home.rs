@@ -19,7 +19,6 @@ use rand::{Rng, SeedableRng, rngs::StdRng};
 use std::collections::HashMap;
 //use hotkey;
 use yew::virtual_dom::Listener;
-wasm_logger::init(wasm_logger::Config::default());
 
 pub struct Home {
     link: ComponentLink<Self>,
