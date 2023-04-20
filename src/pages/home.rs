@@ -19,7 +19,7 @@ use rand::{Rng, SeedableRng, rngs::StdRng};
 use std::collections::HashMap;
 //use hotkey;
 use yew::virtual_dom::Listener;
-
+wasm_logger::init(wasm_logger::Config::default());
 
 pub struct Home {
     link: ComponentLink<Self>,
@@ -124,7 +124,7 @@ impl Component for Home {
 
             let mut rng = Pcg32::seed_from_u64(sd);  
             let word_id: usize = rng.gen_range(0..raw.len());
-	    console.log(word_id);
+	    log::info!("{}", word_id);
 
             for j in 0..5 {
                 word.push(raw[word_id as usize].chars().nth(j).unwrap().to_string());
