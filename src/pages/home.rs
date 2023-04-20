@@ -124,6 +124,7 @@ impl Component for Home {
 
             let mut rng = Pcg32::seed_from_u64(sd);  
             let word_id: usize = rng.gen_range(0..raw.len());
+	    console.log(word_id);
 
             for j in 0..5 {
                 word.push(raw[word_id as usize].chars().nth(j).unwrap().to_string());
@@ -177,37 +178,49 @@ impl Component for Home {
                         self.results_master.push(vec![0; 2]);
                         let mut checked = HashMap::new();
 
-						let idx = self.attempts.len();
-                        // first check exact matches
-						for i in 0..5 { // for each letter in the attempt
-							for j in 0..5 { // for each letter in the answer 
-								if self.attempt[i] == self.word[j] {
-									if i == j {
-                                        let count = checked.entry(self.word[j].clone()).or_insert(0);
-                                        *count += 1;
-										self.results_wordle[idx][i] = String::from("MediumSeaGreen");
-                                        self.results_master[idx][0] += 1;
-                                    }
-                                }
-                            }
-                        }
+			let idx = self.attempts.len();
+			// first check exact matches
+			for i in 0..5 {
+				if self.attempt[i] == self.word[i] {
+					let count = checked.entry(self.word[i].clone()).or_insert(0);
+					*count += 1;
+					self.results_wordle[idx][i] = String::from("MediumSeaGreen");
+					self.results_master[idx][0] += 1;
+				}
+			}
+			/*
+			for i in 0..5 { // for each letter in the attempt
+				for j in 0..5 { // for each letter in the answer 
+					if self.attempt[i] == self.word[j] {
+						if i == j {
+							let count = checked.entry(self.word[j].clone()).or_insert(0);
+							*count += 1;
+							self.results_wordle[idx][i] = String::from("MediumSeaGreen");
+							self.results_master[idx][0] += 1;
+						}
+					}
+				}
+			}
+			*/
+						
                         // now check correct letters in wrong place
                         for i in 0..5 { // for each letter in the attempt
-                            for j in 0..5 { // for each letter in the answer 
-                                if self.attempt[i] == self.word[j] && j != i && checked.get(&self.word[j]) < self.occurrences.get(&self.word[j]){
-                                    let count = checked.entry(self.attempt[i].clone()).or_insert(0);
-                                    *count += 1;
-									self.results_wordle[idx][i] = String::from("Orange"); // need to handle repeated letters where only one is correct
-                                    self.results_master[idx][1] += 1;
-									break; // if a match is found, go to next letter in the attempt - each letter can only count for one!
-								}
-
-							}
-						}
+                            	for j in 0..5 { // for each letter in the answer 
+					// cond. 1 & 2: letter from attempt appears in solution at a different location
+					// cond. 3: letter (in solution) has been counted fewer times than it occurs (mostly to not count a letter that has already been counted above?)
+                                	if self.attempt[i] == self.word[j] && j != i && checked.get(&self.word[j]) < self.occurrences.get(&self.word[j]){
+				    		let count = checked.entry(self.attempt[i].clone()).or_insert(0);
+                                    		*count += 1;
+						self.results_wordle[idx][i] = String::from("Orange"); // need to handle repeated letters where only one is correct
+					    	self.results_master[idx][1] += 1;
+						break; // if a match is found, go to next letter in the attempt - each letter can only count for one!
+					}
+				}
+			}
                         //if self.results_master[idx][0] + self.results_master[idx][1] == 0 { // hints for user to block out letters that are certainly not in it
                         //}
 
-    					let last = self.results_wordle.len()-1;
+			let last = self.results_wordle.len()-1;
                         /*if self.results[last][1] == 5 {
                             log::debug!("CORRECT!");
                         } else {
