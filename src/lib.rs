@@ -33,7 +33,7 @@ pub fn run_app() {
 #[function_component]
 fn App() -> Html {
     html! {
-        <BrowserRouter>
+        <BrowserRouter basename="/mastermind">
             <main>
                 <Switch<Route> render={switch} />
             </main>
