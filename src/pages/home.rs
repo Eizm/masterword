@@ -24,10 +24,10 @@ pub struct Home {
     link: ComponentLink<Self>,
     attempt: Vec<String>,
     attempts: Vec<Vec<String>>,
-	results_wordle: Vec<Vec<String>>,
+    results_wordle: Vec<Vec<String>>,
     results_master: Vec<Vec<u32>>,
-	words: Vec<String>,
-	word: Vec<String>,
+    words: Vec<String>,
+    word: Vec<String>,
     occurrences: HashMap<String, u32>,
     letterstyles: HashMap<String, u32>,
     sd: u64
@@ -46,23 +46,23 @@ thread_local!(static words_raw: Vec<&'static str> = vec!["AAHED", "AALII", "AARG
 
 impl Home {
     fn input(&mut self, letter: String) {
-		if self.attempt.len() < 5 {
-			self.attempt.push(letter);
-		}
+        if self.attempt.len() < 5 {
+            self.attempt.push(letter);
+        }
     }
-	
-	fn check_word(&mut self) -> bool {
+    
+    fn check_word(&mut self) -> bool {
         let mut attempt = String::from("");
         for i in 0..5 {
             attempt.push_str(&self.attempt[i]);
         }
-		for i in 0..self.words.len() {
-			if attempt == self.words[i] {
-				return true;
-			}
-		}
-		false 
-	}
+        for i in 0..self.words.len() {
+            if attempt == self.words[i] {
+                return true;
+            }
+        }
+        false 
+    }
 
     fn set_style(&mut self, a: usize, l: usize) {
         if a < self.attempts.len() {
@@ -103,27 +103,27 @@ impl Component for Home {
     type Message = Msg;
     type Properties = ();
     fn create(_: Self::Properties, link: ComponentLink<Self>) -> Self {
-		let vec = Vec::new();
-		let vec2 = Vec::new();
-		let res1 = Vec::new();
+        let vec = Vec::new();
+        let vec2 = Vec::new();
+        let res1 = Vec::new();
         let res2 = Vec::new();
         let mut words = Vec::new();
         let mut word = Vec::new();
         let mut rng_for_seed = Pcg32::from_rng(thread_rng()).unwrap();
         let sd = rng_for_seed.gen_range(0..100000);  // TODO: increase upper
         words_raw.with(|raw| {
-    		for i in 0..raw.len() {
+            for i in 0..raw.len() {
                 words.push(raw[i].to_string());
-    			/*words.push(Vec::new()); //words_raw[i].to_string());
+                /*words.push(Vec::new()); //words_raw[i].to_string());
                 for j in 0..5 {
                     words[i].push(words_raw[i].chars().nth(j).unwrap().to_string());
                 }*/
-    		}
+            }
 
 
             let mut rng = Pcg32::seed_from_u64(sd);  
             let word_id: usize = rng.gen_range(0..raw.len());
-	    log::info!("{}", word_id);
+            log::info!("{}", word_id);
 
             for j in 0..5 {
                 word.push(raw[word_id as usize].chars().nth(j).unwrap().to_string());
@@ -140,18 +140,18 @@ impl Component for Home {
 
         let letterstyles = HashMap::from([("A".to_string(), 0), ("B".to_string(), 0), ("C".to_string(), 0), ("D".to_string(), 0), ("E".to_string(), 0), ("F".to_string(), 0), ("G".to_string(), 0), ("H".to_string(), 0), ("I".to_string(), 0), ("J".to_string(), 0), ("K".to_string(), 0), ("L".to_string(), 0), ("M".to_string(), 0), ("N".to_string(), 0), ("O".to_string(), 0), ("P".to_string(), 0), ("Q".to_string(), 0), ("R".to_string(), 0), ("S".to_string(), 0), ("T".to_string(), 0), ("U".to_string(), 0), ("v".to_string(), 0), ("W".to_string(), 0), ("X".to_string(), 0), ("Y".to_string(), 0), ("Z".to_string(), 0)]);
 
-		let s = Self {
-			link,
-			attempt: vec,
-			attempts: vec2,
+        let s = Self {
+            link,
+            attempt: vec,
+            attempts: vec2,
             results_wordle: res1,
-			results_master: res2,
+            results_master: res2,
             words: words,//.clone(),
-			word: word,//.to_vec(),
+            word: word,//.to_vec(),
             occurrences: occurrences,
             letterstyles: letterstyles,
             sd: sd,
-		};
+        };
 
         /*
         let mut hk = hotkey::Listener::new();
@@ -163,7 +163,7 @@ impl Component for Home {
         */
         return s;
     }
-	
+    
 
     fn update(&mut self, msg: Self::Message) -> ShouldRender {
         log::debug!("word: {}{}{}{}{}", self.word[0], self.word[1], self.word[2], self.word[3], self.word[4]);
@@ -172,62 +172,62 @@ impl Component for Home {
             Msg::Style(a, l) => self.set_style(a, l),
             Msg::Enter => {
                 if self.attempt.len() == 5 {
-					if self.check_word() {
-						self.results_wordle.push(vec![String::from("Gray"); 5]);
+                    if self.check_word() {
+                        self.results_wordle.push(vec![String::from("Gray"); 5]);
                         self.results_master.push(vec![0; 2]);
                         let mut checked = HashMap::new();
 
-			let idx = self.attempts.len();
-			// first check exact matches
-			for i in 0..5 {
-				if self.attempt[i] == self.word[i] {
-					let count = checked.entry(self.word[i].clone()).or_insert(0);
-					*count += 1;
-					self.results_wordle[idx][i] = String::from("MediumSeaGreen");
-					self.results_master[idx][0] += 1;
-				}
-			}
-			/*
-			for i in 0..5 { // for each letter in the attempt
+            let idx = self.attempts.len();
+            // first check exact matches
+            for i in 0..5 {
+                if self.attempt[i] == self.word[i] {
+                    let count = checked.entry(self.word[i].clone()).or_insert(0);
+                    *count += 1;
+                    self.results_wordle[idx][i] = String::from("MediumSeaGreen");
+                    self.results_master[idx][0] += 1;
+                }
+            }
+            /*
+            for i in 0..5 { // for each letter in the attempt
+                for j in 0..5 { // for each letter in the answer 
+                    if self.attempt[i] == self.word[j] {
+                        if i == j {
+                            let count = checked.entry(self.word[j].clone()).or_insert(0);
+                            *count += 1;
+                            self.results_wordle[idx][i] = String::from("MediumSeaGreen");
+                            self.results_master[idx][0] += 1;
+                        }
+                    }
+                }
+            }
+            */
+                        
+			// now check correct letters in wrong place
+            for i in 0..5 { // for each letter in the attempt
 				for j in 0..5 { // for each letter in the answer 
-					if self.attempt[i] == self.word[j] {
-						if i == j {
-							let count = checked.entry(self.word[j].clone()).or_insert(0);
-							*count += 1;
-							self.results_wordle[idx][i] = String::from("MediumSeaGreen");
-							self.results_master[idx][0] += 1;
-						}
-					}
-				}
-			}
-			*/
-						
-                        // now check correct letters in wrong place
-                        for i in 0..5 { // for each letter in the attempt
-                            	for j in 0..5 { // for each letter in the answer 
 					// cond. 1 & 2: letter from attempt appears in solution at a different location
 					// cond. 3: letter (in solution) has been counted fewer times than it occurs (mostly to not count a letter that has already been counted above?)
-                                	if self.attempt[i] == self.word[j] && j != i && checked.get(&self.word[j]) < self.occurrences.get(&self.word[j]){
-				    		let count = checked.entry(self.attempt[i].clone()).or_insert(0);
-                                    		*count += 1;
+					if self.attempt[i] == self.word[j] && j != i && checked.get(&self.attempt[i]) < self.occurrences.get(&self.word[j]){
+						let count = checked.entry(self.attempt[i].clone()).or_insert(0);
+						*count += 1;
 						self.results_wordle[idx][i] = String::from("Orange"); // need to handle repeated letters where only one is correct
-					    	self.results_master[idx][1] += 1;
+						self.results_master[idx][1] += 1;
 						break; // if a match is found, go to next letter in the attempt - each letter can only count for one!
-					}
-				}
-			}
+                    }
+                }
+            }
                         //if self.results_master[idx][0] + self.results_master[idx][1] == 0 { // hints for user to block out letters that are certainly not in it
                         //}
 
-			let last = self.results_wordle.len()-1;
+            let last = self.results_wordle.len()-1;
                         /*if self.results[last][1] == 5 {
                             log::debug!("CORRECT!");
                         } else {
                             for i in 0..5 {
                                 self.results[last][i]
                                 */
-						self.attempts.push(self.attempt.clone());
-						self.attempt = Vec::new();
+                        self.attempts.push(self.attempt.clone());
+                        self.attempt = Vec::new();
                     } else {
                         log::debug!("not a word");
                     }
@@ -264,7 +264,7 @@ impl Component for Home {
 
     fn view(&self) -> Html {
         let mut letters = vec![vec!["".to_string(); 5]; 12];
-		//let mut results = vec![vec![String::from("LightGrey"); 2]; 6];
+        //let mut results = vec![vec![String::from("LightGrey"); 2]; 6];
         let mut results = vec![vec![0; 2]; 12];
         //log::debug!("n attempts: {}", self.attempts.len());
         for i in 0..self.attempts.len() {
@@ -273,7 +273,7 @@ impl Component for Home {
                 //results[i][j] = self.results[i][j].clone();
             }
             results[i][0] = self.results_master[i][0];
-			results[i][1] = self.results_master[i][1];
+            results[i][1] = self.results_master[i][1];
         }
         let get_hints = |a: usize, l: usize| -> String {if self.attempts.len() <= a {String::from("")} else {format!("{}", results[a][l])}};
         for i in 0..self.attempt.len() {
