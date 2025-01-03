@@ -1,13 +1,9 @@
 #![recursion_limit = "10000"]
-mod app_router;
-mod components;
-mod pages;
+mod home;
 
 use wasm_bindgen::prelude::*;
-use yew::prelude::*;
 use wasm_logger;
-
-use app_router::AppRouter;
+use yew::prelude::*;
 
 struct Model {}
 
@@ -28,7 +24,7 @@ impl Component for Model {
 
     fn view(&self) -> Html {
         html! {
-            <AppRouter/>
+            <home::Home/>
         }
     }
 }
