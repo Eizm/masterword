@@ -9,7 +9,7 @@ crate-type = ["cdylib", "rlib"]
 
 [dependencies]
 yew = { version = "0.21", features = ["csr"] }
-# yew-router = "0.14.0"
+yew-router = { version = "0.18" }  # , rev = "yew-v0.21.0" }
 wasm-bindgen = "0.2.67"
 web-sys = "0.3.46"
 log = "0.4.6"

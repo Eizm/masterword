@@ -8,10 +8,6 @@ when letter is grey, apply to all letters, incl keyboard
 
 use yew::prelude::*;
 
-use rand::prelude::*;
-use rand::SeedableRng;
-use rand_pcg::Pcg32;
-
 use std::collections::HashMap;
 //use hotkey;
 
@@ -104,24 +100,31 @@ impl Home {
     }
 }
 
+#[derive(Properties, PartialEq)]
+pub struct GameProps {
+    pub id: u32,
+}
+
 impl Component for Home {
     type Message = Msg;
-    type Properties = ();
-    fn create(_: &Context<Self>) -> Self {
+    type Properties = GameProps;
+    fn create(ctx: &Context<Self>) -> Self {
         let vec = Vec::new();
         let vec2 = Vec::new();
         let res1 = Vec::new();
         let res2 = Vec::new();
         let mut word = Vec::new();
-        let mut rng_for_seed = Pcg32::from_rng(thread_rng()).unwrap();
-        let sd = rng_for_seed.gen_range(0..100000); // TODO: increase upper
-
-        let mut rng = Pcg32::seed_from_u64(sd);
-        let word_id: usize = rng.gen_range(0..WORDS_RAW.len());
+        let word_id = ctx.props().id % WORDS_RAW.len() as u32;
         log::info!("{}", word_id);
 
         for j in 0..5 {
-            word.push(WORDS_RAW[word_id].chars().nth(j).unwrap().to_string());
+            word.push(
+                WORDS_RAW[word_id as usize]
+                    .chars()
+                    .nth(j)
+                    .unwrap()
+                    .to_string(),
+            );
         }
 
         //log::debug!("test");
