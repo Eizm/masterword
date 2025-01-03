@@ -22,21 +22,21 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - run: rustup target add wasm32-unknown-unknown
-      - uses: actions/checkout@v2 
+      - uses: actions/checkout@v2
 
       - uses: jetli/trunk-action@v0.2.0
         with:
           # Optional version of trunk to install(eg. 'v0.8.1', 'latest')
-          version: 'latest'
+          version: "latest"
 
       - uses: jetli/wasm-pack-action@v0.4.0
         with:
           # Optional version of wasm-pack to install(eg. 'v0.9.1', 'latest')
-          version: 'latest'
-          
+          version: "latest"
+
       - uses: Swatinem/rust-cache@v2
-      
-      - run: trunk build --public-url=./masterword
+
+      - run: trunk build
 
       - uses: actions/configure-pages@v2
 
