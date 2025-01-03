@@ -16,7 +16,6 @@ use std::collections::HashMap;
 //use hotkey;
 
 pub struct Home {
-    link: ComponentLink<Self>,
     attempt: Vec<String>,
     attempts: Vec<Vec<String>>,
     results_wordle: Vec<Vec<String>>,
@@ -108,7 +107,7 @@ impl Home {
 impl Component for Home {
     type Message = Msg;
     type Properties = ();
-    fn create(_: Self::Properties, link: ComponentLink<Self>) -> Self {
+    fn create(_: &Context<Self>) -> Self {
         let vec = Vec::new();
         let vec2 = Vec::new();
         let res1 = Vec::new();
@@ -164,7 +163,6 @@ impl Component for Home {
         ]);
 
         let s = Self {
-            link,
             attempt: vec,
             attempts: vec2,
             results_wordle: res1,
@@ -185,7 +183,7 @@ impl Component for Home {
         return s;
     }
 
-    fn update(&mut self, msg: Self::Message) -> ShouldRender {
+    fn update(&mut self, _ctx: &Context<Self>, msg: Self::Message) -> bool {
         log::debug!(
             "word: {}{}{}{}{}",
             self.word[0],
@@ -269,14 +267,7 @@ impl Component for Home {
         true
     }
 
-    fn change(&mut self, _props: Self::Properties) -> ShouldRender {
-        // Should only return "true" if new properties are different to
-        // previously received properties.
-        // This component has no properties so we will always return "false".
-        false
-    }
-
-    fn view(&self) -> Html {
+    fn view(&self, ctx: &Context<Self>) -> Html {
         let mut letters = vec![vec!["".to_string(); 5]; 12];
         //let mut results = vec![vec![String::from("LightGrey"); 2]; 6];
         let mut results = vec![vec![0; 2]; 12];
@@ -306,133 +297,133 @@ impl Component for Home {
         html! {
             <div>
                 //<label class="field" style=slice>{letters[0][0].clone()}</label>
-                <button class="field" onclick={self.link.callback(|_| Msg::Style(0, 0))} style=self.guessletter_style(0, 0)>{letters[0][0].clone()}</button>
-                <button class="field" onclick={self.link.callback(|_| Msg::Style(0, 1))} style=self.guessletter_style(0, 1)>{letters[0][1].clone()}</button>
-                <button class="field" onclick={self.link.callback(|_| Msg::Style(0, 2))} style=self.guessletter_style(0, 2)>{letters[0][2].clone()}</button>
-                <button class="field" onclick={self.link.callback(|_| Msg::Style(0, 3))} style=self.guessletter_style(0, 3)>{letters[0][3].clone()}</button>
-                <button class="field" onclick={self.link.callback(|_| Msg::Style(0, 4))} style=self.guessletter_style(0, 4)>{letters[0][4].clone()}</button>
+                <button class="field" onclick={ctx.link().callback(|_| Msg::Style(0, 0))} style={self.guessletter_style(0, 0)}>{letters[0][0].clone()}</button>
+                <button class="field" onclick={ctx.link().callback(|_| Msg::Style(0, 1))} style={self.guessletter_style(0, 1)}>{letters[0][1].clone()}</button>
+                <button class="field" onclick={ctx.link().callback(|_| Msg::Style(0, 2))} style={self.guessletter_style(0, 2)}>{letters[0][2].clone()}</button>
+                <button class="field" onclick={ctx.link().callback(|_| Msg::Style(0, 3))} style={self.guessletter_style(0, 3)}>{letters[0][3].clone()}</button>
+                <button class="field" onclick={ctx.link().callback(|_| Msg::Style(0, 4))} style={self.guessletter_style(0, 4)}>{letters[0][4].clone()}</button>
                 <label class="corr1" style="border-radius:4px;top: 10px; left:315px;">{get_hints(0, 0)}</label>
                 <label class="corr2" style="border-radius:4px;top: 40px; left:315px;">{get_hints(0, 1)}</label>
 
-                <button class="field" onclick={self.link.callback(|_| Msg::Style(1, 0))} style=self.guessletter_style(1, 0)>{letters[1][0].clone()}</button>
-                <button class="field" onclick={self.link.callback(|_| Msg::Style(1, 1))} style=self.guessletter_style(1, 1)>{letters[1][1].clone()}</button>
-                <button class="field" onclick={self.link.callback(|_| Msg::Style(1, 2))} style=self.guessletter_style(1, 2)>{letters[1][2].clone()}</button>
-                <button class="field" onclick={self.link.callback(|_| Msg::Style(1, 3))} style=self.guessletter_style(1, 3)>{letters[1][3].clone()}</button>
-                <button class="field" onclick={self.link.callback(|_| Msg::Style(1, 4))} style=self.guessletter_style(1, 4)>{letters[1][4].clone()}</button>
+                <button class="field" onclick={ctx.link().callback(|_| Msg::Style(1, 0))} style={self.guessletter_style(1, 0)}>{letters[1][0].clone()}</button>
+                <button class="field" onclick={ctx.link().callback(|_| Msg::Style(1, 1))} style={self.guessletter_style(1, 1)}>{letters[1][1].clone()}</button>
+                <button class="field" onclick={ctx.link().callback(|_| Msg::Style(1, 2))} style={self.guessletter_style(1, 2)}>{letters[1][2].clone()}</button>
+                <button class="field" onclick={ctx.link().callback(|_| Msg::Style(1, 3))} style={self.guessletter_style(1, 3)}>{letters[1][3].clone()}</button>
+                <button class="field" onclick={ctx.link().callback(|_| Msg::Style(1, 4))} style={self.guessletter_style(1, 4)}>{letters[1][4].clone()}</button>
                 <label class="corr1" style="border-radius:4px;top: 100px; left:315px;">{get_hints(1, 0)}</label>
                 <label class="corr2" style="border-radius:4px;top: 130px; left:315px;">{get_hints(1, 1)}</label>
 
-                <button class="field" onclick={self.link.callback(|_| Msg::Style(2, 0))} style=self.guessletter_style(2, 0)>{letters[2][0].clone()}</button>
-                <button class="field" onclick={self.link.callback(|_| Msg::Style(2, 1))} style=self.guessletter_style(2, 1)>{letters[2][1].clone()}</button>
-                <button class="field" onclick={self.link.callback(|_| Msg::Style(2, 2))} style=self.guessletter_style(2, 2)>{letters[2][2].clone()}</button>
-                <button class="field" onclick={self.link.callback(|_| Msg::Style(2, 3))} style=self.guessletter_style(2, 3)>{letters[2][3].clone()}</button>
-                <button class="field" onclick={self.link.callback(|_| Msg::Style(2, 4))} style=self.guessletter_style(2, 4)>{letters[2][4].clone()}</button>
+                <button class="field" onclick={ctx.link().callback(|_| Msg::Style(2, 0))} style={self.guessletter_style(2, 0)}>{letters[2][0].clone()}</button>
+                <button class="field" onclick={ctx.link().callback(|_| Msg::Style(2, 1))} style={self.guessletter_style(2, 1)}>{letters[2][1].clone()}</button>
+                <button class="field" onclick={ctx.link().callback(|_| Msg::Style(2, 2))} style={self.guessletter_style(2, 2)}>{letters[2][2].clone()}</button>
+                <button class="field" onclick={ctx.link().callback(|_| Msg::Style(2, 3))} style={self.guessletter_style(2, 3)}>{letters[2][3].clone()}</button>
+                <button class="field" onclick={ctx.link().callback(|_| Msg::Style(2, 4))} style={self.guessletter_style(2, 4)}>{letters[2][4].clone()}</button>
                 <label class="corr1" style="border-radius:4px;top: 190px; left:315px;">{get_hints(2, 0)}</label>
                 <label class="corr2" style="border-radius:4px;top: 220px; left:315px;">{get_hints(2, 1)}</label>
 
-                <button class="field" onclick={self.link.callback(|_| Msg::Style(3, 0))} style=self.guessletter_style(3, 0)>{letters[3][0].clone()}</button>
-                <button class="field" onclick={self.link.callback(|_| Msg::Style(3, 1))} style=self.guessletter_style(3, 1)>{letters[3][1].clone()}</button>
-                <button class="field" onclick={self.link.callback(|_| Msg::Style(3, 2))} style=self.guessletter_style(3, 2)>{letters[3][2].clone()}</button>
-                <button class="field" onclick={self.link.callback(|_| Msg::Style(3, 3))} style=self.guessletter_style(3, 3)>{letters[3][3].clone()}</button>
-                <button class="field" onclick={self.link.callback(|_| Msg::Style(3, 4))} style=self.guessletter_style(3, 4)>{letters[3][4].clone()}</button>
+                <button class="field" onclick={ctx.link().callback(|_| Msg::Style(3, 0))} style={self.guessletter_style(3, 0)}>{letters[3][0].clone()}</button>
+                <button class="field" onclick={ctx.link().callback(|_| Msg::Style(3, 1))} style={self.guessletter_style(3, 1)}>{letters[3][1].clone()}</button>
+                <button class="field" onclick={ctx.link().callback(|_| Msg::Style(3, 2))} style={self.guessletter_style(3, 2)}>{letters[3][2].clone()}</button>
+                <button class="field" onclick={ctx.link().callback(|_| Msg::Style(3, 3))} style={self.guessletter_style(3, 3)}>{letters[3][3].clone()}</button>
+                <button class="field" onclick={ctx.link().callback(|_| Msg::Style(3, 4))} style={self.guessletter_style(3, 4)}>{letters[3][4].clone()}</button>
                 <label class="corr1" style="border-radius:4px;top: 280px; left:315px;">{get_hints(3, 0)}</label>
                 <label class="corr2" style="border-radius:4px;top: 310px; left:315px;">{get_hints(3, 1)}</label>
 
-                <button class="field" onclick={self.link.callback(|_| Msg::Style(4, 0))} style=self.guessletter_style(4, 0)>{letters[4][0].clone()}</button>
-                <button class="field" onclick={self.link.callback(|_| Msg::Style(4, 1))} style=self.guessletter_style(4, 1)>{letters[4][1].clone()}</button>
-                <button class="field" onclick={self.link.callback(|_| Msg::Style(4, 2))} style=self.guessletter_style(4, 2)>{letters[4][2].clone()}</button>
-                <button class="field" onclick={self.link.callback(|_| Msg::Style(4, 3))} style=self.guessletter_style(4, 3)>{letters[4][3].clone()}</button>
-                <button class="field" onclick={self.link.callback(|_| Msg::Style(4, 4))} style=self.guessletter_style(4, 4)>{letters[4][4].clone()}</button>
+                <button class="field" onclick={ctx.link().callback(|_| Msg::Style(4, 0))} style={self.guessletter_style(4, 0)}>{letters[4][0].clone()}</button>
+                <button class="field" onclick={ctx.link().callback(|_| Msg::Style(4, 1))} style={self.guessletter_style(4, 1)}>{letters[4][1].clone()}</button>
+                <button class="field" onclick={ctx.link().callback(|_| Msg::Style(4, 2))} style={self.guessletter_style(4, 2)}>{letters[4][2].clone()}</button>
+                <button class="field" onclick={ctx.link().callback(|_| Msg::Style(4, 3))} style={self.guessletter_style(4, 3)}>{letters[4][3].clone()}</button>
+                <button class="field" onclick={ctx.link().callback(|_| Msg::Style(4, 4))} style={self.guessletter_style(4, 4)}>{letters[4][4].clone()}</button>
                 <label class="corr1" style="border-radius:4px;top: 370px; left:315px;">{get_hints(4, 0)}</label>
                 <label class="corr2" style="border-radius:4px;top: 400px; left:315px;">{get_hints(4, 1)}</label>
 
-                <button class="field" onclick={self.link.callback(|_| Msg::Style(5, 0))} style=self.guessletter_style(5, 0)>{letters[5][0].clone()}</button>
-                <button class="field" onclick={self.link.callback(|_| Msg::Style(5, 1))} style=self.guessletter_style(5, 1)>{letters[5][1].clone()}</button>
-                <button class="field" onclick={self.link.callback(|_| Msg::Style(5, 2))} style=self.guessletter_style(5, 2)>{letters[5][2].clone()}</button>
-                <button class="field" onclick={self.link.callback(|_| Msg::Style(5, 3))} style=self.guessletter_style(5, 3)>{letters[5][3].clone()}</button>
-                <button class="field" onclick={self.link.callback(|_| Msg::Style(5, 4))} style=self.guessletter_style(5, 4)>{letters[5][4].clone()}</button>
+                <button class="field" onclick={ctx.link().callback(|_| Msg::Style(5, 0))} style={self.guessletter_style(5, 0)}>{letters[5][0].clone()}</button>
+                <button class="field" onclick={ctx.link().callback(|_| Msg::Style(5, 1))} style={self.guessletter_style(5, 1)}>{letters[5][1].clone()}</button>
+                <button class="field" onclick={ctx.link().callback(|_| Msg::Style(5, 2))} style={self.guessletter_style(5, 2)}>{letters[5][2].clone()}</button>
+                <button class="field" onclick={ctx.link().callback(|_| Msg::Style(5, 3))} style={self.guessletter_style(5, 3)}>{letters[5][3].clone()}</button>
+                <button class="field" onclick={ctx.link().callback(|_| Msg::Style(5, 4))} style={self.guessletter_style(5, 4)}>{letters[5][4].clone()}</button>
                 <label class="corr1" style="border-radius:4px;top: 460px; left:315px;">{get_hints(5, 0)}</label>
                 <label class="corr2" style="border-radius:4px;top: 490px; left:315px;">{get_hints(5, 1)}</label>
 
-                <button class="field" onclick={self.link.callback(|_| Msg::Style(6, 0))} style=self.guessletter_style(6, 0)>{letters[6][0].clone()}</button>
-                <button class="field" onclick={self.link.callback(|_| Msg::Style(6, 1))} style=self.guessletter_style(6, 1)>{letters[6][1].clone()}</button>
-                <button class="field" onclick={self.link.callback(|_| Msg::Style(6, 2))} style=self.guessletter_style(6, 2)>{letters[6][2].clone()}</button>
-                <button class="field" onclick={self.link.callback(|_| Msg::Style(6, 3))} style=self.guessletter_style(6, 3)>{letters[6][3].clone()}</button>
-                <button class="field" onclick={self.link.callback(|_| Msg::Style(6, 4))} style=self.guessletter_style(6, 4)>{letters[6][4].clone()}</button>
+                <button class="field" onclick={ctx.link().callback(|_| Msg::Style(6, 0))} style={self.guessletter_style(6, 0)}>{letters[6][0].clone()}</button>
+                <button class="field" onclick={ctx.link().callback(|_| Msg::Style(6, 1))} style={self.guessletter_style(6, 1)}>{letters[6][1].clone()}</button>
+                <button class="field" onclick={ctx.link().callback(|_| Msg::Style(6, 2))} style={self.guessletter_style(6, 2)}>{letters[6][2].clone()}</button>
+                <button class="field" onclick={ctx.link().callback(|_| Msg::Style(6, 3))} style={self.guessletter_style(6, 3)}>{letters[6][3].clone()}</button>
+                <button class="field" onclick={ctx.link().callback(|_| Msg::Style(6, 4))} style={self.guessletter_style(6, 4)}>{letters[6][4].clone()}</button>
                 <label class="corr1" style="border-radius:4px;top: 10px; left:630px;">{get_hints(6, 0)}</label>
                 <label class="corr2" style="border-radius:4px;top: 40px; left:630px;">{get_hints(6, 1)}</label>
 
-                <button class="field" onclick={self.link.callback(|_| Msg::Style(7, 0))} style=self.guessletter_style(7, 0)>{letters[7][0].clone()}</button>
-                <button class="field" onclick={self.link.callback(|_| Msg::Style(7, 1))} style=self.guessletter_style(7, 1)>{letters[7][1].clone()}</button>
-                <button class="field" onclick={self.link.callback(|_| Msg::Style(7, 2))} style=self.guessletter_style(7, 2)>{letters[7][2].clone()}</button>
-                <button class="field" onclick={self.link.callback(|_| Msg::Style(7, 3))} style=self.guessletter_style(7, 3)>{letters[7][3].clone()}</button>
-                <button class="field" onclick={self.link.callback(|_| Msg::Style(7, 4))} style=self.guessletter_style(7, 4)>{letters[7][4].clone()}</button>
+                <button class="field" onclick={ctx.link().callback(|_| Msg::Style(7, 0))} style={self.guessletter_style(7, 0)}>{letters[7][0].clone()}</button>
+                <button class="field" onclick={ctx.link().callback(|_| Msg::Style(7, 1))} style={self.guessletter_style(7, 1)}>{letters[7][1].clone()}</button>
+                <button class="field" onclick={ctx.link().callback(|_| Msg::Style(7, 2))} style={self.guessletter_style(7, 2)}>{letters[7][2].clone()}</button>
+                <button class="field" onclick={ctx.link().callback(|_| Msg::Style(7, 3))} style={self.guessletter_style(7, 3)}>{letters[7][3].clone()}</button>
+                <button class="field" onclick={ctx.link().callback(|_| Msg::Style(7, 4))} style={self.guessletter_style(7, 4)}>{letters[7][4].clone()}</button>
                 <label class="corr1" style="border-radius:4px;top: 100px; left:630px;">{get_hints(7, 0)}</label>
                 <label class="corr2" style="border-radius:4px;top: 130px; left:630px;">{get_hints(7, 1)}</label>
 
-                <button class="field" onclick={self.link.callback(|_| Msg::Style(8, 0))} style=self.guessletter_style(8, 0)>{letters[8][0].clone()}</button>
-                <button class="field" onclick={self.link.callback(|_| Msg::Style(8, 1))} style=self.guessletter_style(8, 1)>{letters[8][1].clone()}</button>
-                <button class="field" onclick={self.link.callback(|_| Msg::Style(8, 2))} style=self.guessletter_style(8, 2)>{letters[8][2].clone()}</button>
-                <button class="field" onclick={self.link.callback(|_| Msg::Style(8, 3))} style=self.guessletter_style(8, 3)>{letters[8][3].clone()}</button>
-                <button class="field" onclick={self.link.callback(|_| Msg::Style(8, 4))} style=self.guessletter_style(8, 4)>{letters[8][4].clone()}</button>
+                <button class="field" onclick={ctx.link().callback(|_| Msg::Style(8, 0))} style={self.guessletter_style(8, 0)}>{letters[8][0].clone()}</button>
+                <button class="field" onclick={ctx.link().callback(|_| Msg::Style(8, 1))} style={self.guessletter_style(8, 1)}>{letters[8][1].clone()}</button>
+                <button class="field" onclick={ctx.link().callback(|_| Msg::Style(8, 2))} style={self.guessletter_style(8, 2)}>{letters[8][2].clone()}</button>
+                <button class="field" onclick={ctx.link().callback(|_| Msg::Style(8, 3))} style={self.guessletter_style(8, 3)}>{letters[8][3].clone()}</button>
+                <button class="field" onclick={ctx.link().callback(|_| Msg::Style(8, 4))} style={self.guessletter_style(8, 4)}>{letters[8][4].clone()}</button>
                 <label class="corr1" style="border-radius:4px;top: 190px; left:630px;">{get_hints(8, 0)}</label>
                 <label class="corr2" style="border-radius:4px;top: 220px; left:630px;">{get_hints(8, 1)}</label>
 
-                <button class="field" onclick={self.link.callback(|_| Msg::Style(9, 0))} style=self.guessletter_style(9, 0)>{letters[9][0].clone()}</button>
-                <button class="field" onclick={self.link.callback(|_| Msg::Style(9, 1))} style=self.guessletter_style(9, 1)>{letters[9][1].clone()}</button>
-                <button class="field" onclick={self.link.callback(|_| Msg::Style(9, 2))} style=self.guessletter_style(9, 2)>{letters[9][2].clone()}</button>
-                <button class="field" onclick={self.link.callback(|_| Msg::Style(9, 3))} style=self.guessletter_style(9, 3)>{letters[9][3].clone()}</button>
-                <button class="field" onclick={self.link.callback(|_| Msg::Style(9, 4))} style=self.guessletter_style(9, 4)>{letters[9][4].clone()}</button>
+                <button class="field" onclick={ctx.link().callback(|_| Msg::Style(9, 0))} style={self.guessletter_style(9, 0)}>{letters[9][0].clone()}</button>
+                <button class="field" onclick={ctx.link().callback(|_| Msg::Style(9, 1))} style={self.guessletter_style(9, 1)}>{letters[9][1].clone()}</button>
+                <button class="field" onclick={ctx.link().callback(|_| Msg::Style(9, 2))} style={self.guessletter_style(9, 2)}>{letters[9][2].clone()}</button>
+                <button class="field" onclick={ctx.link().callback(|_| Msg::Style(9, 3))} style={self.guessletter_style(9, 3)}>{letters[9][3].clone()}</button>
+                <button class="field" onclick={ctx.link().callback(|_| Msg::Style(9, 4))} style={self.guessletter_style(9, 4)}>{letters[9][4].clone()}</button>
                 <label class="corr1" style="border-radius:4px;top: 280px; left:630px;">{get_hints(9, 0)}</label>
                 <label class="corr2" style="border-radius:4px;top: 310px; left:630px;">{get_hints(9, 1)}</label>
 
-                <button class="field" onclick={self.link.callback(|_| Msg::Style(10, 0))} style=self.guessletter_style(10, 0)>{letters[10][0].clone()}</button>
-                <button class="field" onclick={self.link.callback(|_| Msg::Style(10, 1))} style=self.guessletter_style(10, 1)>{letters[10][1].clone()}</button>
-                <button class="field" onclick={self.link.callback(|_| Msg::Style(10, 2))} style=self.guessletter_style(10, 2)>{letters[10][2].clone()}</button>
-                <button class="field" onclick={self.link.callback(|_| Msg::Style(10, 3))} style=self.guessletter_style(10, 3)>{letters[10][3].clone()}</button>
-                <button class="field" onclick={self.link.callback(|_| Msg::Style(10, 4))} style=self.guessletter_style(10, 4)>{letters[10][4].clone()}</button>
+                <button class="field" onclick={ctx.link().callback(|_| Msg::Style(10, 0))} style={self.guessletter_style(10, 0)}>{letters[10][0].clone()}</button>
+                <button class="field" onclick={ctx.link().callback(|_| Msg::Style(10, 1))} style={self.guessletter_style(10, 1)}>{letters[10][1].clone()}</button>
+                <button class="field" onclick={ctx.link().callback(|_| Msg::Style(10, 2))} style={self.guessletter_style(10, 2)}>{letters[10][2].clone()}</button>
+                <button class="field" onclick={ctx.link().callback(|_| Msg::Style(10, 3))} style={self.guessletter_style(10, 3)}>{letters[10][3].clone()}</button>
+                <button class="field" onclick={ctx.link().callback(|_| Msg::Style(10, 4))} style={self.guessletter_style(10, 4)}>{letters[10][4].clone()}</button>
                 <label class="corr1" style="border-radius:4px;top: 370px; left:630px;">{get_hints(10, 0)}</label>
                 <label class="corr2" style="border-radius:4px;top: 400px; left:630px;">{get_hints(10, 1)}</label>
 
-                <button class="field" onclick={self.link.callback(|_| Msg::Style(11, 0))} style=self.guessletter_style(11, 0)>{letters[11][0].clone()}</button>
-                <button class="field" onclick={self.link.callback(|_| Msg::Style(11, 1))} style=self.guessletter_style(11, 1)>{letters[11][1].clone()}</button>
-                <button class="field" onclick={self.link.callback(|_| Msg::Style(11, 2))} style=self.guessletter_style(11, 2)>{letters[11][2].clone()}</button>
-                <button class="field" onclick={self.link.callback(|_| Msg::Style(11, 3))} style=self.guessletter_style(11, 3)>{letters[11][3].clone()}</button>
-                <button class="field" onclick={self.link.callback(|_| Msg::Style(11, 4))} style=self.guessletter_style(11, 4)>{letters[11][4].clone()}</button>
+                <button class="field" onclick={ctx.link().callback(|_| Msg::Style(11, 0))} style={self.guessletter_style(11, 0)}>{letters[11][0].clone()}</button>
+                <button class="field" onclick={ctx.link().callback(|_| Msg::Style(11, 1))} style={self.guessletter_style(11, 1)}>{letters[11][1].clone()}</button>
+                <button class="field" onclick={ctx.link().callback(|_| Msg::Style(11, 2))} style={self.guessletter_style(11, 2)}>{letters[11][2].clone()}</button>
+                <button class="field" onclick={ctx.link().callback(|_| Msg::Style(11, 3))} style={self.guessletter_style(11, 3)}>{letters[11][3].clone()}</button>
+                <button class="field" onclick={ctx.link().callback(|_| Msg::Style(11, 4))} style={self.guessletter_style(11, 4)}>{letters[11][4].clone()}</button>
                 <label class="corr1" style="border-radius:4px;top: 460px; left:630px;">{get_hints(11, 0)}</label>
                 <label class="corr2" style="border-radius:4px;top: 490px; left:630px;">{get_hints(11, 1)}</label>
 
-                <button class="btn" onclick={self.link.callback(|_| Msg::Letter("Q".to_string()))} style=format!("border-radius:4px;top: 600px; left:30px; {}", self.keyboardletter_style("Q".to_string()))>{"q"}</button>
-                <button class="btn" onclick={self.link.callback(|_| Msg::Letter("W".to_string()))} style=format!("border-radius:4px;top: 600px; left:60px; {}", self.keyboardletter_style("W".to_string()))>{"w"}</button>
-                <button class="btn" onclick={self.link.callback(|_| Msg::Letter("E".to_string()))} style=format!("border-radius:4px;top: 600px; left:90px; {}", self.keyboardletter_style("E".to_string()))>{"e"}</button>
-                <button class="btn" onclick={self.link.callback(|_| Msg::Letter("R".to_string()))} style=format!("border-radius:4px;top: 600px; left:120px; {}", self.keyboardletter_style("R".to_string()))>{"r"}</button>
-                <button class="btn" onclick={self.link.callback(|_| Msg::Letter("T".to_string()))} style=format!("border-radius:4px;top: 600px; left:150px; {}", self.keyboardletter_style("T".to_string()))>{"t"}</button>
-                <button class="btn" onclick={self.link.callback(|_| Msg::Letter("Y".to_string()))} style=format!("border-radius:4px;top: 600px; left:180px; {}", self.keyboardletter_style("Y".to_string()))>{"y"}</button>
-                <button class="btn" onclick={self.link.callback(|_| Msg::Letter("U".to_string()))} style=format!("border-radius:4px;top: 600px; left:210px; {}", self.keyboardletter_style("U".to_string()))>{"u"}</button>
-                <button class="btn" onclick={self.link.callback(|_| Msg::Letter("I".to_string()))} style=format!("border-radius:4px;top: 600px; left:240px; {}", self.keyboardletter_style("I".to_string()))>{"i"}</button>
-                <button class="btn" onclick={self.link.callback(|_| Msg::Letter("O".to_string()))} style=format!("border-radius:4px;top: 600px; left:270px; {}", self.keyboardletter_style("O".to_string()))>{"o"}</button>
-                <button class="btn" onclick={self.link.callback(|_| Msg::Letter("P".to_string()))} style=format!("border-radius:4px;top: 600px; left:300px; {}", self.keyboardletter_style("P".to_string()))>{"p"}</button>
+                <button class="btn" onclick={ctx.link().callback(|_| Msg::Letter("Q".to_string()))} style={format!("border-radius:4px;top: 600px; left:30px; {}", self.keyboardletter_style("Q".to_string()))}>{"q"}</button>
+                <button class="btn" onclick={ctx.link().callback(|_| Msg::Letter("W".to_string()))} style={format!("border-radius:4px;top: 600px; left:60px; {}", self.keyboardletter_style("W".to_string()))}>{"w"}</button>
+                <button class="btn" onclick={ctx.link().callback(|_| Msg::Letter("E".to_string()))} style={format!("border-radius:4px;top: 600px; left:90px; {}", self.keyboardletter_style("E".to_string()))}>{"e"}</button>
+                <button class="btn" onclick={ctx.link().callback(|_| Msg::Letter("R".to_string()))} style={format!("border-radius:4px;top: 600px; left:120px; {}", self.keyboardletter_style("R".to_string()))}>{"r"}</button>
+                <button class="btn" onclick={ctx.link().callback(|_| Msg::Letter("T".to_string()))} style={format!("border-radius:4px;top: 600px; left:150px; {}", self.keyboardletter_style("T".to_string()))}>{"t"}</button>
+                <button class="btn" onclick={ctx.link().callback(|_| Msg::Letter("Y".to_string()))} style={format!("border-radius:4px;top: 600px; left:180px; {}", self.keyboardletter_style("Y".to_string()))}>{"y"}</button>
+                <button class="btn" onclick={ctx.link().callback(|_| Msg::Letter("U".to_string()))} style={format!("border-radius:4px;top: 600px; left:210px; {}", self.keyboardletter_style("U".to_string()))}>{"u"}</button>
+                <button class="btn" onclick={ctx.link().callback(|_| Msg::Letter("I".to_string()))} style={format!("border-radius:4px;top: 600px; left:240px; {}", self.keyboardletter_style("I".to_string()))}>{"i"}</button>
+                <button class="btn" onclick={ctx.link().callback(|_| Msg::Letter("O".to_string()))} style={format!("border-radius:4px;top: 600px; left:270px; {}", self.keyboardletter_style("O".to_string()))}>{"o"}</button>
+                <button class="btn" onclick={ctx.link().callback(|_| Msg::Letter("P".to_string()))} style={format!("border-radius:4px;top: 600px; left:300px; {}", self.keyboardletter_style("P".to_string()))}>{"p"}</button>
 
-                <button class="btn" onclick={self.link.callback(|_| Msg::Letter("A".to_string()))} style=format!("border-radius:4px;top: 640px; left:45px; {}", self.keyboardletter_style("A".to_string()))>{"a"}</button>
-                <button class="btn" onclick={self.link.callback(|_| Msg::Letter("S".to_string()))} style=format!("border-radius:4px;top: 640px; left:75px; {}", self.keyboardletter_style("S".to_string()))>{"s"}</button>
-                <button class="btn" onclick={self.link.callback(|_| Msg::Letter("D".to_string()))} style=format!("border-radius:4px;top: 640px; left:105px; {}", self.keyboardletter_style("D".to_string()))>{"d"}</button>
-                <button class="btn" onclick={self.link.callback(|_| Msg::Letter("F".to_string()))} style=format!("border-radius:4px;top: 640px; left:135px; {}", self.keyboardletter_style("F".to_string()))>{"f"}</button>
-                <button class="btn" onclick={self.link.callback(|_| Msg::Letter("G".to_string()))} style=format!("border-radius:4px;top: 640px; left:165px; {}", self.keyboardletter_style("G".to_string()))>{"g"}</button>
-                <button class="btn" onclick={self.link.callback(|_| Msg::Letter("H".to_string()))} style=format!("border-radius:4px;top: 640px; left:195px; {}", self.keyboardletter_style("H".to_string()))>{"h"}</button>
-                <button class="btn" onclick={self.link.callback(|_| Msg::Letter("J".to_string()))} style=format!("border-radius:4px;top: 640px; left:225px; {}", self.keyboardletter_style("J".to_string()))>{"j"}</button>
-                <button class="btn" onclick={self.link.callback(|_| Msg::Letter("K".to_string()))} style=format!("border-radius:4px;top: 640px; left:255px; {}", self.keyboardletter_style("K".to_string()))>{"k"}</button>
-                <button class="btn" onclick={self.link.callback(|_| Msg::Letter("L".to_string()))} style=format!("border-radius:4px;top: 640px; left:285px; {}", self.keyboardletter_style("L".to_string()))>{"l"}</button>
+                <button class="btn" onclick={ctx.link().callback(|_| Msg::Letter("A".to_string()))} style={format!("border-radius:4px;top: 640px; left:45px; {}", self.keyboardletter_style("A".to_string()))}>{"a"}</button>
+                <button class="btn" onclick={ctx.link().callback(|_| Msg::Letter("S".to_string()))} style={format!("border-radius:4px;top: 640px; left:75px; {}", self.keyboardletter_style("S".to_string()))}>{"s"}</button>
+                <button class="btn" onclick={ctx.link().callback(|_| Msg::Letter("D".to_string()))} style={format!("border-radius:4px;top: 640px; left:105px; {}", self.keyboardletter_style("D".to_string()))}>{"d"}</button>
+                <button class="btn" onclick={ctx.link().callback(|_| Msg::Letter("F".to_string()))} style={format!("border-radius:4px;top: 640px; left:135px; {}", self.keyboardletter_style("F".to_string()))}>{"f"}</button>
+                <button class="btn" onclick={ctx.link().callback(|_| Msg::Letter("G".to_string()))} style={format!("border-radius:4px;top: 640px; left:165px; {}", self.keyboardletter_style("G".to_string()))}>{"g"}</button>
+                <button class="btn" onclick={ctx.link().callback(|_| Msg::Letter("H".to_string()))} style={format!("border-radius:4px;top: 640px; left:195px; {}", self.keyboardletter_style("H".to_string()))}>{"h"}</button>
+                <button class="btn" onclick={ctx.link().callback(|_| Msg::Letter("J".to_string()))} style={format!("border-radius:4px;top: 640px; left:225px; {}", self.keyboardletter_style("J".to_string()))}>{"j"}</button>
+                <button class="btn" onclick={ctx.link().callback(|_| Msg::Letter("K".to_string()))} style={format!("border-radius:4px;top: 640px; left:255px; {}", self.keyboardletter_style("K".to_string()))}>{"k"}</button>
+                <button class="btn" onclick={ctx.link().callback(|_| Msg::Letter("L".to_string()))} style={format!("border-radius:4px;top: 640px; left:285px; {}", self.keyboardletter_style("L".to_string()))}>{"l"}</button>
 
-                <button class="btn" onclick={self.link.callback(|_| Msg::Letter("Z".to_string()))} style=format!("border-radius:4px;top: 680px; left:60px; {}", self.keyboardletter_style("Z".to_string()))>{"z"}</button>
-                <button class="btn" onclick={self.link.callback(|_| Msg::Letter("X".to_string()))} style=format!("border-radius:4px;top: 680px; left:90px; {}", self.keyboardletter_style("X".to_string()))>{"x"}</button>
-                <button class="btn" onclick={self.link.callback(|_| Msg::Letter("C".to_string()))} style=format!("border-radius:4px;top: 680px; left:120px; {}", self.keyboardletter_style("C".to_string()))>{"c"}</button>
-                <button class="btn" onclick={self.link.callback(|_| Msg::Letter("V".to_string()))} style=format!("border-radius:4px;top: 680px; left:150px; {}", self.keyboardletter_style("V".to_string()))>{"v"}</button>
-                <button class="btn" onclick={self.link.callback(|_| Msg::Letter("B".to_string()))} style=format!("border-radius:4px;top: 680px; left:180px; {}", self.keyboardletter_style("B".to_string()))>{"b"}</button>
-                <button class="btn" onclick={self.link.callback(|_| Msg::Letter("N".to_string()))} style=format!("border-radius:4px;top: 680px; left:210px; {}", self.keyboardletter_style("N".to_string()))>{"n"}</button>
-                <button class="btn" onclick={self.link.callback(|_| Msg::Letter("M".to_string()))} style=format!("border-radius:4px;top: 680px; left:240px; {}", self.keyboardletter_style("M".to_string()))>{"m"}</button>
+                <button class="btn" onclick={ctx.link().callback(|_| Msg::Letter("Z".to_string()))} style={format!("border-radius:4px;top: 680px; left:60px; {}", self.keyboardletter_style("Z".to_string()))}>{"z"}</button>
+                <button class="btn" onclick={ctx.link().callback(|_| Msg::Letter("X".to_string()))} style={format!("border-radius:4px;top: 680px; left:90px; {}", self.keyboardletter_style("X".to_string()))}>{"x"}</button>
+                <button class="btn" onclick={ctx.link().callback(|_| Msg::Letter("C".to_string()))} style={format!("border-radius:4px;top: 680px; left:120px; {}", self.keyboardletter_style("C".to_string()))}>{"c"}</button>
+                <button class="btn" onclick={ctx.link().callback(|_| Msg::Letter("V".to_string()))} style={format!("border-radius:4px;top: 680px; left:150px; {}", self.keyboardletter_style("V".to_string()))}>{"v"}</button>
+                <button class="btn" onclick={ctx.link().callback(|_| Msg::Letter("B".to_string()))} style={format!("border-radius:4px;top: 680px; left:180px; {}", self.keyboardletter_style("B".to_string()))}>{"b"}</button>
+                <button class="btn" onclick={ctx.link().callback(|_| Msg::Letter("N".to_string()))} style={format!("border-radius:4px;top: 680px; left:210px; {}", self.keyboardletter_style("N".to_string()))}>{"n"}</button>
+                <button class="btn" onclick={ctx.link().callback(|_| Msg::Letter("M".to_string()))} style={format!("border-radius:4px;top: 680px; left:240px; {}", self.keyboardletter_style("M".to_string()))}>{"m"}</button>
 
-                <button class="btn2" onclick={self.link.callback(|_| Msg::Enter)} style="border-radius:4px;top: 680px; left:18px;width=60px">{"Enter"}</button>
-                <button class="btn2" onclick={self.link.callback(|_| Msg::Backspace)} style="border-radius:4px;top: 680px; left:270px;width=60px">{"<-"}</button>
+                <button class="btn2" onclick={ctx.link().callback(|_| Msg::Enter)} style="border-radius:4px;top: 680px; left:18px;width=60px">{"Enter"}</button>
+                <button class="btn2" onclick={ctx.link().callback(|_| Msg::Backspace)} style="border-radius:4px;top: 680px; left:270px;width=60px">{"<-"}</button>
                 <div class="instructions" style="top:30px;left:700px;width=500px;white-space=normal;">{"How Masterword-clues work: The two boxes next to each attempt tell you how many letters occur in exactly the guessed location (top) and how many letters occur in a different location (bottom).\nTo help the player keep track, each letter can be coloured in green, orange, grey, or white (default). These colours are cycled when clicking on any occurrence of the letter in a guess. Be aware that any letter can globally only have one single colour."}</div>
 
             </div>

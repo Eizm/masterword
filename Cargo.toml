@@ -8,8 +8,8 @@ edition = "2018"
 crate-type = ["cdylib", "rlib"]
 
 [dependencies]
-yew = "0.17"
-yew-router = "0.14.0"
+yew = { version = "0.21", features = ["csr"] }
+# yew-router = "0.14.0"
 wasm-bindgen = "0.2.67"
 web-sys = "0.3.46"
 log = "0.4.6"
