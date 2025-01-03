@@ -56,7 +56,10 @@ fn Index() -> Html {
     //     use_effect(move || game.set(thread_rng().gen()))
     // };
 
+    let id = thread_rng().gen();
+    log::debug!("generated {id}");
+
     html! {
-        <Redirect<Route> to={Route::Game{ id: thread_rng().gen() } } />
+        <Redirect<Route> to={Route::Game{ id } } />
     }
 }
